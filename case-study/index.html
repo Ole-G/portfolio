@@ -1,0 +1,327 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Creator outreach for a US EdTech company: a case study</title>
+<meta name="description" content="How one consultant ran creator outreach for a US EdTech company with AI agents doing the routine and a human approving every send.">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Sofia+Sans+Condensed:wght@600;700;800&family=Source+Serif+4:ital,opsz,wght@0,8..60,400;0,8..60,600;1,8..60,400&display=swap">
+<style>
+/* Signature: every checked number carries a highlighter stroke; the funnel is drawn to true scale.
+   Everything else stays quiet: one reading column, left aligned. */
+:root {
+  --paper: #f4f6f3;
+  --ink: #10262b;
+  --muted: #51656a;
+  --line: #cbd5d1;
+  --bar: #2f6f6a;
+  --marker: #ffe45c;
+  --marker-ink: #10262b;
+  --display: "Sofia Sans Condensed", "Arial Narrow", "Helvetica Neue", Arial, sans-serif;
+  --body: "Source Serif 4", Georgia, "Times New Roman", serif;
+}
+@media (prefers-color-scheme: dark) {
+  :root {
+    --paper: #0d1c20;
+    --ink: #e8efec;
+    --muted: #9db0ac;
+    --line: #2b4046;
+    --bar: #5fb3ab;
+    --marker: #f2d43d;
+    --marker-ink: #10262b;
+  }
+}
+* { box-sizing: border-box; }
+html { -webkit-text-size-adjust: 100%; }
+body {
+  margin: 0;
+  background: var(--paper);
+  color: var(--ink);
+  font: 400 19px/1.62 var(--body);
+  padding: 0 20px 96px;
+}
+.page { max-width: 1040px; margin: 0 auto; }
+.col { max-width: 66ch; }
+
+.byline {
+  font: 600 18px/1.3 var(--display);
+  letter-spacing: .01em;
+  color: var(--muted);
+  padding: 28px 0 0;
+  margin: 0;
+}
+
+h1 {
+  font: 800 clamp(44px, 8.2vw, 104px)/.94 var(--display);
+  letter-spacing: -.012em;
+  margin: 56px 0 0;
+  max-width: 13ch;
+  text-wrap: balance;
+}
+.lede {
+  font-size: clamp(20px, 2.1vw, 24px);
+  line-height: 1.45;
+  max-width: 34em;
+  margin: 28px 0 0;
+}
+
+h2 {
+  font: 700 clamp(30px, 3.6vw, 42px)/1.04 var(--display);
+  margin: 0 0 18px;
+  text-wrap: balance;
+}
+h3 {
+  font: 700 24px/1.15 var(--display);
+  margin: 0 0 6px;
+}
+p { margin: 0 0 16px; }
+section { margin-top: 88px; }
+a { color: inherit; text-decoration-thickness: 2px; text-underline-offset: 3px; }
+a:focus-visible { outline: 3px solid var(--bar); outline-offset: 3px; }
+
+/* the highlighter */
+.n {
+  font-family: var(--display);
+  font-weight: 700;
+  font-variant-numeric: tabular-nums lining-nums;
+  color: var(--marker-ink);
+  background: linear-gradient(transparent 14%, var(--marker) 14%, var(--marker) 90%, transparent 90%);
+  padding: 0 .14em;
+  white-space: nowrap;
+  -webkit-box-decoration-break: clone;
+  box-decoration-break: clone;
+}
+
+/* funnel, bars to true scale */
+.funnel { margin: 64px 0 0; padding: 0; list-style: none; }
+.funnel li {
+  display: grid;
+  grid-template-columns: 250px minmax(0, 1fr);
+  align-items: center;
+  gap: 18px;
+  padding: 9px 0;
+  border-top: 1px solid var(--line);
+}
+.funnel li:last-child { border-bottom: 1px solid var(--line); }
+.funnel .what { display: flex; align-items: baseline; gap: 12px; }
+.funnel .fig {
+  font: 800 34px/1 var(--display);
+  font-variant-numeric: tabular-nums lining-nums;
+  min-width: 3.1em;
+  text-align: right;
+}
+.funnel .word { font: 600 19px/1.2 var(--display); color: var(--muted); }
+.funnel .bar {
+  height: 26px;
+  width: var(--w);
+  min-width: 2px;
+  background: var(--bar);
+  transform-origin: left center;
+  animation: grow .9s cubic-bezier(.2, .7, .2, 1) both;
+}
+.funnel li:nth-child(2) .bar { animation-delay: .12s; }
+.funnel li:nth-child(3) .bar { animation-delay: .24s; }
+.funnel li:nth-child(4) .bar { animation-delay: .36s; }
+.funnel li:nth-child(5) .bar { animation-delay: .48s; }
+@keyframes grow { from { transform: scaleX(0); } to { transform: scaleX(1); } }
+@media (prefers-reduced-motion: reduce) { .funnel .bar { animation: none; } }
+.note { font-size: 16px; line-height: 1.5; color: var(--muted); margin: 14px 0 0; max-width: 60ch; }
+
+/* the sequence is a real sequence, so it is numbered */
+.steps { list-style: none; counter-reset: step; margin: 0; padding: 0; }
+.steps li {
+  counter-increment: step;
+  display: grid;
+  grid-template-columns: 44px minmax(0, 1fr);
+  gap: 6px 10px;
+  padding: 16px 0;
+  border-top: 1px solid var(--line);
+}
+.steps li::before {
+  content: counter(step);
+  font: 800 30px/1 var(--display);
+  color: var(--bar);
+}
+.steps li > div > p { margin: 0; }
+
+/* figures */
+.figures { margin: 0; padding: 0; list-style: none; columns: 2; column-gap: 56px; }
+.figures li {
+  break-inside: avoid;
+  padding: 14px 0;
+  border-top: 1px solid var(--line);
+}
+.figures .n { font-size: 30px; line-height: 1.25; }
+.figures p { margin: 6px 0 0; font-size: 17px; line-height: 1.5; }
+
+/* incident table */
+.rules { width: 100%; border-collapse: collapse; margin-top: 22px; font-size: 17px; line-height: 1.5; }
+.rules th {
+  font: 700 18px/1.2 var(--display);
+  text-align: left;
+  padding: 0 18px 10px 0;
+  color: var(--muted);
+}
+.rules td { vertical-align: top; padding: 14px 18px 14px 0; border-top: 1px solid var(--line); width: 50%; }
+.stops { margin: 0; padding-left: 1.1em; }
+.stops li { margin-bottom: 8px; }
+
+blockquote {
+  margin: 0;
+  padding: 0 0 0 22px;
+  border-left: 6px solid var(--marker);
+  font-size: clamp(21px, 2.3vw, 26px);
+  line-height: 1.42;
+  max-width: 30em;
+}
+blockquote footer { font: 600 18px/1.3 var(--display); color: var(--muted); margin-top: 14px; }
+
+.missing {
+  border: 2px solid var(--ink);
+  padding: 26px 28px 12px;
+  max-width: 66ch;
+}
+.contact { font: 700 clamp(26px, 3vw, 34px)/1.15 var(--display); }
+.foot { font-size: 15px; color: var(--muted); margin-top: 72px; max-width: 60ch; }
+
+@media (max-width: 760px) {
+  body { font-size: 18px; padding: 0 16px 72px; }
+  section { margin-top: 64px; }
+  .funnel li { grid-template-columns: minmax(0, 1fr); gap: 6px; }
+  .funnel .fig { min-width: 0; text-align: left; font-size: 30px; }
+  .figures { columns: 1; }
+  .rules, .rules tbody, .rules tr, .rules td { display: block; width: 100%; }
+  .rules thead { display: none; }
+  .rules td { padding: 12px 0 0; border-top: 0; }
+  .rules tr { border-top: 1px solid var(--line); padding-bottom: 12px; }
+  .rules td:first-child { font-weight: 600; }
+}
+@media print {
+  body { background: #fff; color: #000; font-size: 11.5pt; padding: 0; }
+  section { margin-top: 28pt; break-inside: avoid; }
+  .funnel .bar { animation: none; print-color-adjust: exact; -webkit-print-color-adjust: exact; }
+  .n { print-color-adjust: exact; -webkit-print-color-adjust: exact; }
+  h1 { font-size: 46pt; margin-top: 20pt; }
+}
+
+nav.site { display: flex; flex-wrap: wrap; justify-content: space-between; align-items: baseline;
+  gap: 8px 24px; padding: 26px 0 0; font: 600 19px/1.3 var(--display); }
+nav.site a { text-decoration: none; }
+nav.site .who { color: var(--ink); font-weight: 700; }
+nav.site .links { display: flex; flex-wrap: wrap; gap: 6px 22px; }
+nav.site .links a { color: var(--muted); }
+nav.site .links a:hover, nav.site .links a[aria-current="page"] { color: var(--ink);
+  text-decoration: underline; text-decoration-thickness: 2px; text-underline-offset: 5px; }
+</style>
+</head>
+<body>
+<div class="page">
+
+  <nav class="site" aria-label="Site"><a class="who" href="../index.html">Oleh Rozvadovskyy</a><span class="links"><a href="../case-study/index.html" aria-current="page">Case study</a><a href="../services/index.html">Services</a><a href="../product/index.html">Tools</a></span></nav>
+
+  <header>
+    <h1>Two people, a set of AI agents, and 7,050 creators pitched</h1>
+    <p class="lede">I ran creator outreach for a US EdTech company on a contract in 2026. Agents did the sourcing, sorting and drafting. I approved every send, every price and every term.</p>
+
+    <ol class="funnel" aria-label="Outreach funnel from first pitch to published video">
+      <li><span class="what"><span class="fig">7,050</span><span class="word">creators pitched</span></span><span class="bar" style="--w:100%"></span></li>
+      <li><span class="what"><span class="fig">991</span><span class="word">replied</span></span><span class="bar" style="--w:14.06%"></span></li>
+      <li><span class="what"><span class="fig">793</span><span class="word">warm conversations</span></span><span class="bar" style="--w:11.25%"></span></li>
+      <li><span class="what"><span class="fig">30</span><span class="word">shortlisted</span></span><span class="bar" style="--w:0.43%"></span></li>
+      <li><span class="what"><span class="fig">9</span><span class="word">videos published</span></span><span class="bar" style="--w:0.13%"></span></li>
+    </ol>
+    <p class="note">The bars are drawn to scale. The last two are thin because that is what creator outreach looks like: most of the work is deciding who not to pay.</p>
+  </header>
+
+  <section class="col">
+    <h2>The situation</h2>
+    <p>The company teaches IT and AI skills to working adults in the United States. Creator marketing was run by two people: the head of the function and me. Partway through, the company moved from career-change bootcamps to a new line of AI programs, so the audience, the creators and the offer all had to change.</p>
+    <p>There was no team to hand the routine to. Finding creators, checking whether their audience fits, writing to them, answering, negotiating and getting contracts signed is hundreds of small tasks a day. I built the machine that does those tasks and kept the decisions for people.</p>
+  </section>
+
+  <section class="col">
+    <h2>What I ran, in order</h2>
+    <ol class="steps">
+      <li><div><h3>Find</h3><p>Look-alike searches from creators who had already worked, creators tagged by similar brands, past partners, agency rosters. A search run cost <span class="n">$3 to $15</span>.</p></div></li>
+      <li><div><h3>Check the fit</h3><p>Each creator is judged on what they say in their videos, not on their bio. Transcripts go through a scoring model trained on our own yes and no decisions.</p></div></li>
+      <li><div><h3>Write and follow up</h3><p>Email, two creator marketplaces and platform messages land in one inbox. Addresses are checked before sending, and each mailbox has a daily limit.</p></div></li>
+      <li><div><h3>Negotiate</h3><p>Replies are sorted and the quoted price is pulled out, including from attached rate cards. The price is compared with reach measured from the creator's recent posts.</p></div></li>
+      <li><div><h3>Contract and brief</h3><p>Statements of work, usage rights, payment steps with finance and legal, then the creative brief.</p></div></li>
+    </ol>
+  </section>
+
+  <section>
+    <h2>Numbers that held up when checked</h2>
+    <ul class="figures">
+      <li><span class="n">8,700</span><p>creators in the pipeline, each with fit score, contact route and conversation history.</p></li>
+      <li><span class="n">9% to 33%</span><p>reply rate depending on the channel. Creator marketplaces replied best, on small samples.</p></li>
+      <li><span class="n">45 overnight</span><p>The request was for 20 more expert candidates. The list was ready the next morning and the run cost under $3.</p></li>
+      <li><span class="n">0.72 → 0.86</span><p>accuracy of the fit model (AUC) after adding video transcripts. At 90% recall it blocks 62% of creators who would not fit.</p></li>
+      <li><span class="n">17 hours → 3 minutes</span><p>from a teammate's message to a prepared answer waiting for my approval. Seventeen hours was the worst case before.</p></li>
+      <li><span class="n">−88%</span><p>data-collection spend, after finding a job that was buying the same data again every minute.</p></li>
+      <li><span class="n">2.4% → about 1%</span><p>hard bounces, after adding address checks before sending.</p></li>
+      <li><span class="n">28 of 47</span><p>reply drafts were better with the new drafting engine in a blind review; 6 were worse.</p></li>
+      <li><span class="n">118 fixed</span><p>serious findings from a full audit of the system, which now has more than 2,100 automated tests.</p></li>
+    </ul>
+  </section>
+
+  <section class="col">
+    <h2>Three calls that saved money</h2>
+
+    <h3>Measure the reach before discussing the price</h3>
+    <p>A creator asked for $52k. The system showed almost no reach, so the team was about to drop them. I went back to the raw posts: old pinned videos and videos too new to have collected views were distorting the sample. With the method fixed, the real reach was <span class="n">17 times</span> higher. The quote still worked out to a <span class="n">$1,120 CPM</span>, so the answer stayed no, for the right reason. The same check turned other creators from a no into a good deal.</p>
+
+    <h3>Go back to creators who already delivered</h3>
+    <p>Cold search is slow and expensive. I assembled the creators whose earlier videos had performed and offered to repeat the work, starting from the earlier fee. The first four asked for <span class="n">0.6 to 1.1 times</span> what they had been paid before.</p>
+
+    <h3>Re-read the contacts nobody wrote to</h3>
+    <p>The database held <span class="n">6,174</span> creators who had been filtered out on thin data and never contacted. I re-scored all of them on their actual videos and recovered <span class="n">194</span> strong fits for about a dollar of data collection plus model time.</p>
+  </section>
+
+  <section class="col">
+    <h2>Where the agents stop</h2>
+    <ul class="stops">
+      <li>A person presses Send on every one-to-one message.</li>
+      <li>A person accepts every price, budget and contract term.</li>
+      <li>One draft per conversation, and a message counts as sent only when the mailbox says so.</li>
+      <li>Text written by other people is data for the agents, never an instruction.</li>
+    </ul>
+    <p>Things went wrong along the way. Each time, the fix was a rule in code, not a promise to be careful.</p>
+    <table class="rules">
+      <thead><tr><th>What went wrong</th><th>The rule it became</th></tr></thead>
+      <tbody>
+        <tr><td>Internal sourcing notes were emailed to 45 creators.</td><td>A message that does not read like a pitch is held, not sent.</td></tr>
+        <tr><td>A cleanup job deleted replies that had already gone out.</td><td>Only the mailbox's own sent label decides what was sent.</td></tr>
+        <tr><td>Drafts tried to reopen prices that were already agreed.</td><td>A price agreed in writing is closed; the checker rejects any draft that changes it.</td></tr>
+        <tr><td>The mail provider blocked a second sending domain after 894 sends and three replies.</td><td>No third cold touch, and no jump from zero to hundreds of sends a week.</td></tr>
+      </tbody>
+    </table>
+  </section>
+
+  <section>
+    <div class="missing">
+      <h2>What this case does not show</h2>
+      <p>Views, leads and sales from the new AI programs. The launches I prepared were scheduled for after my contract ended, when the company downsized its team. So this page shows what I controlled: the size and speed of the pipeline, the cost of running it, and the quality of the buying decisions.</p>
+    </div>
+  </section>
+
+  <section>
+    <blockquote>
+      <p>“What I valued most was his judgment. Oleh checks the numbers before anyone makes a decision, and more than once he went back to the raw data and showed us that a creator we were about to turn down was actually a good deal.”</p>
+      <footer>The client's Head of Influencer Marketing, my manager on this project</footer>
+    </blockquote>
+  </section>
+
+  <section class="col">
+    <h2>Talk to me</h2>
+    <p>I take on creator and partnership projects, audits of past influencer spend, and automation for outreach teams.</p>
+    <p class="contact">Find me on LinkedIn: Oleh Rozvadovskyy</p>
+  </section>
+
+  <p class="foot">The client's name is withheld under the contract; I can share it in conversation. Figures are rounded from working reports.</p>
+
+</div>
+</body>
+</html>

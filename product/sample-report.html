@@ -1,0 +1,1492 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Sample integration audit report</title>
+<meta name="description" content="A sample integration audit report built on invented data.">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Sofia+Sans+Condensed:wght@600;700;800&family=Source+Serif+4:ital,opsz,wght@0,8..60,400;0,8..60,600;1,8..60,400&display=swap">
+<style>
+/* Shared by the home, tools and sample-report pages. Same tokens as the case study and services pages:
+   highlighter on checked numbers, one quiet reading column, left aligned. */
+:root {
+  --paper: #f4f6f3; --ink: #10262b; --muted: #51656a; --line: #cbd5d1; --bar: #2f6f6a;
+  --marker: #ffe45c; --marker-ink: #10262b;
+  --display: "Sofia Sans Condensed", "Arial Narrow", "Helvetica Neue", Arial, sans-serif;
+  --body: "Source Serif 4", Georgia, "Times New Roman", serif;
+}
+@media (prefers-color-scheme: dark) {
+  :root { --paper: #0d1c20; --ink: #e8efec; --muted: #9db0ac; --line: #2b4046; --bar: #5fb3ab; --marker: #f2d43d; }
+}
+* { box-sizing: border-box; }
+html { -webkit-text-size-adjust: 100%; }
+body { margin: 0; background: var(--paper); color: var(--ink); font: 400 19px/1.62 var(--body); padding: 0 20px 96px; }
+.page { max-width: 1040px; margin: 0 auto; }
+.col { max-width: 66ch; }
+h1 { font: 800 clamp(42px, 7.6vw, 96px)/.95 var(--display); letter-spacing: -.012em; margin: 56px 0 0; max-width: 15ch; text-wrap: balance; }
+.lede { font-size: clamp(20px, 2.1vw, 24px); line-height: 1.45; max-width: 34em; margin: 28px 0 0; }
+h2 { font: 700 clamp(30px, 3.6vw, 42px)/1.04 var(--display); margin: 0 0 18px; text-wrap: balance; }
+h3 { font: 700 24px/1.15 var(--display); margin: 26px 0 8px; }
+p { margin: 0 0 16px; }
+section { margin-top: 88px; }
+a { color: inherit; text-decoration-thickness: 2px; text-underline-offset: 3px; }
+a:focus-visible { outline: 3px solid var(--bar); outline-offset: 3px; }
+.n { font-family: var(--display); font-weight: 700; font-variant-numeric: tabular-nums lining-nums; color: var(--marker-ink);
+  white-space: nowrap; padding: 0 .14em;
+  background: linear-gradient(transparent 14%, var(--marker) 14%, var(--marker) 90%, transparent 90%); }
+.stops { margin: 0 0 16px; padding-left: 1.1em; }
+.stops li { margin-bottom: 8px; }
+.contact { font: 700 clamp(26px, 3vw, 34px)/1.15 var(--display); }
+.foot { font-size: 15px; color: var(--muted); margin-top: 72px; max-width: 60ch; }
+blockquote { margin: 0; padding: 0 0 0 22px; border-left: 6px solid var(--marker); font-size: clamp(21px, 2.3vw, 26px); line-height: 1.42; max-width: 30em; }
+blockquote footer { font: 600 18px/1.3 var(--display); color: var(--muted); margin-top: 14px; }
+
+/* home: three ways in, set as large links */
+.doors { list-style: none; margin: 72px 0 0; padding: 0; border-top: 2px solid var(--ink); }
+.doors li { border-bottom: 1px solid var(--line); }
+.doors a { display: grid; grid-template-columns: minmax(0, 5fr) minmax(0, 7fr); gap: 8px 40px; align-items: baseline; padding: 26px 0; text-decoration: none; }
+.doors .door { font: 800 clamp(34px, 5vw, 60px)/1 var(--display); }
+.doors .what { font-size: 19px; line-height: 1.5; color: var(--muted); }
+.doors a:hover .door, .doors a:focus-visible .door { text-decoration: underline; text-decoration-thickness: 4px; text-underline-offset: 6px; }
+.figures { margin: 0; padding: 0; list-style: none; columns: 2; column-gap: 56px; }
+.figures li { break-inside: avoid; padding: 14px 0; border-top: 1px solid var(--line); }
+.figures .n { font-size: 30px; line-height: 1.25; }
+.figures p { margin: 6px 0 0; font-size: 17px; line-height: 1.5; }
+
+/* tools: the audit is a real sequence, so it is numbered */
+.steps { list-style: none; counter-reset: step; margin: 22px 0 26px; padding: 0; }
+.steps li { counter-increment: step; display: grid; grid-template-columns: 44px minmax(0, 1fr); gap: 6px 10px; padding: 14px 0; border-top: 1px solid var(--line); }
+.steps li::before { content: counter(step); font: 800 30px/1 var(--display); color: var(--bar); }
+.steps h3 { margin: 0 0 4px; }
+.steps p { margin: 0; }
+.status { font: 600 19px/1.3 var(--display); color: var(--muted); margin: -8px 0 16px; }
+
+/* sample report */
+.banner { border: 2px solid var(--ink); padding: 16px 20px; margin: 40px 0 0; max-width: 66ch; }
+.banner p { margin: 0; }
+.report { margin-top: 48px; font-size: 17px; line-height: 1.55; }
+.report h1 { font-size: clamp(36px, 5vw, 60px); max-width: none; margin-top: 0; }
+.report h2 { margin-top: 56px; font-size: clamp(26px, 3vw, 34px); }
+.report h3 { font-size: 22px; }
+.report p, .report ul, .report ol { max-width: 72ch; }
+.report blockquote { font-size: 17px; border-left-width: 4px; padding-left: 14px; margin: 0 0 12px; max-width: 72ch; color: var(--muted); }
+.report code { font-family: ui-monospace, Consolas, monospace; font-size: .88em; background: color-mix(in srgb, var(--line) 45%, transparent); padding: 0 .25em; }
+.scroll { overflow-x: auto; margin: 0 0 22px; }
+.report table { border-collapse: collapse; font-size: 15.5px; line-height: 1.4; min-width: 100%; font-variant-numeric: tabular-nums lining-nums; }
+.report th { font: 700 16px/1.25 var(--display); text-align: left; color: var(--muted); padding: 6px 16px 6px 0; border-bottom: 2px solid var(--ink); white-space: nowrap; }
+.report td { padding: 6px 16px 6px 0; border-bottom: 1px solid var(--line); vertical-align: top; }
+
+@media (max-width: 760px) {
+  body { font-size: 18px; padding: 0 16px 72px; }
+  section { margin-top: 64px; }
+  .doors a { grid-template-columns: minmax(0, 1fr); padding: 22px 0; }
+  .figures { columns: 1; }
+}
+
+nav.site { display: flex; flex-wrap: wrap; justify-content: space-between; align-items: baseline;
+  gap: 8px 24px; padding: 26px 0 0; font: 600 19px/1.3 var(--display); }
+nav.site a { text-decoration: none; }
+nav.site .who { color: var(--ink); font-weight: 700; }
+nav.site .links { display: flex; flex-wrap: wrap; gap: 6px 22px; }
+nav.site .links a { color: var(--muted); }
+nav.site .links a:hover, nav.site .links a[aria-current="page"] { color: var(--ink);
+  text-decoration: underline; text-decoration-thickness: 2px; text-underline-offset: 5px; }
+</style>
+</head>
+<body>
+<div class="page">
+<nav class="site" aria-label="Site"><a class="who" href="../index.html">Oleh Rozvadovskyy</a><span class="links"><a href="../case-study/index.html">Case study</a><a href="../services/index.html">Services</a><a href="../product/index.html" aria-current="page">Tools</a></span></nav>
+<div class="banner"><p>This is a sample. The advertiser, the creators and every number are invented. It shows what the audit delivers, not anyone's results. <a href="index.html">Back to the tools page</a>.</p></div>
+<article class="report">
+<h1>Integration Audit: Brambleway Academy</h1>
+<blockquote>
+<p><strong>Sample report.</strong> Built from the synthetic dataset in <code>data/sample/</code>. The advertiser, the creators and every number are invented.</p>
+<p>Offline mode: tables and readout are produced by code with fixed rules. No LLM wrote this text. The LLM mode adds a fuller narrative on top of the same tables.</p>
+</blockquote>
+<h2>1. What was analysed</h2>
+<ul>
+<li>Integrations: 118 (youtube 58, reel 40, story 12, tiktok 8)</li>
+<li>With content scores (transcript available): 88</li>
+<li>With at least one contact: 117; with at least one purchase: 65</li>
+<li>Valid cost per contact: 117</li>
+</ul>
+<p>Two layers are kept apart. Layer 1 covers what the creator's content can plausibly move: traffic, contacts and cost per contact. Layer 2 covers deals, calls and purchases, which depend on sales operations.</p>
+<h2>2. Executive summary</h2>
+<ol>
+<li>On short-form (Reels and TikTok), a higher <code>benefit_clarity</code> score goes with a lower cost per contact (Spearman rho -0.41, medium effect, N=35, power 0.22, underpowered; table C2v2). <strong>Probable signal.</strong></li>
+<li>On YouTube, a higher <code>specificity</code> score goes with a lower cost per contact (Spearman rho -0.36, medium effect, N=52, power 0.25, underpowered; table C1v2). <strong>Probable signal.</strong></li>
+<li>Median cost per contact by platform: story $33 (n=12); youtube $83 (n=58); reel $87 (n=40); tiktok $208 (n=8). This compares funnel metrics only, never content features across platforms (table R1v2). <strong>Hypothesis.</strong></li>
+<li>After the click, the weakest funnel stage is <code>Calls -&gt; Purchase</code> with a median conversion of 8.8% (table R2v2). That stage belongs to the sales conversation and pricing, not to the creator's script. <strong>Hypothesis</strong> (descriptive only).</li>
+<li>Share of integrations with at least one purchase: reel 42.5% of 40; story 75.0% of 12; tiktok 25.0% of 8; youtube 63.8% of 58. Purchases sit several steps after the content, so this is context for sales operations, not a verdict on creative (table D1v2). <strong>Probable signal.</strong></li>
+</ol>
+<h2>3. Layer 1: what content is associated with</h2>
+<p>Score-versus-cost correlations, strongest first. A negative rho means a higher score goes with a cheaper contact.</p>
+<div class="scroll"><table>
+<thead>
+<tr>
+<th>Scope</th>
+<th>Score</th>
+<th>Rho</th>
+<th>N</th>
+<th>Adj. p</th>
+<th>Power</th>
+<th>Evidence</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>short-form (Reels and TikTok)</td>
+<td>benefit_clarity</td>
+<td>-0.41</td>
+<td>35</td>
+<td>0.094</td>
+<td>0.22</td>
+<td>Probable signal</td>
+</tr>
+<tr>
+<td>YouTube</td>
+<td>specificity</td>
+<td>-0.36</td>
+<td>52</td>
+<td>0.094</td>
+<td>0.25</td>
+<td>Probable signal</td>
+</tr>
+<tr>
+<td>YouTube</td>
+<td>benefit_clarity</td>
+<td>-0.35</td>
+<td>52</td>
+<td>0.094</td>
+<td>0.24</td>
+<td>Probable signal</td>
+</tr>
+<tr>
+<td>short-form (Reels and TikTok)</td>
+<td>professionalism</td>
+<td>+0.31</td>
+<td>35</td>
+<td>0.297</td>
+<td>0.15</td>
+<td>Hypothesis</td>
+</tr>
+<tr>
+<td>short-form (Reels and TikTok)</td>
+<td>specificity</td>
+<td>-0.25</td>
+<td>35</td>
+<td>0.474</td>
+<td>0.11</td>
+<td>Hypothesis</td>
+</tr>
+<tr>
+<td>YouTube</td>
+<td>authenticity</td>
+<td>-0.23</td>
+<td>52</td>
+<td>0.428</td>
+<td>0.13</td>
+<td>Hypothesis</td>
+</tr>
+<tr>
+<td>YouTube</td>
+<td>emotional_appeal</td>
+<td>-0.20</td>
+<td>52</td>
+<td>0.474</td>
+<td>0.11</td>
+<td>Hypothesis</td>
+</tr>
+<tr>
+<td>short-form (Reels and TikTok)</td>
+<td>authenticity</td>
+<td>-0.19</td>
+<td>35</td>
+<td>0.587</td>
+<td>0.08</td>
+<td>Hypothesis</td>
+</tr>
+<tr>
+<td>short-form (Reels and TikTok)</td>
+<td>storytelling</td>
+<td>-0.17</td>
+<td>35</td>
+<td>0.608</td>
+<td>0.07</td>
+<td>Hypothesis</td>
+</tr>
+<tr>
+<td>YouTube</td>
+<td>urgency</td>
+<td>-0.13</td>
+<td>52</td>
+<td>0.608</td>
+<td>0.07</td>
+<td>Hypothesis</td>
+</tr>
+<tr>
+<td>YouTube</td>
+<td>storytelling</td>
+<td>-0.10</td>
+<td>52</td>
+<td>0.719</td>
+<td>0.06</td>
+<td>Hypothesis</td>
+</tr>
+<tr>
+<td>short-form (Reels and TikTok)</td>
+<td>humor</td>
+<td>+0.03</td>
+<td>35</td>
+<td>0.940</td>
+<td>0.03</td>
+<td>Hypothesis</td>
+</tr>
+<tr>
+<td>short-form (Reels and TikTok)</td>
+<td>urgency</td>
+<td>-0.03</td>
+<td>35</td>
+<td>0.940</td>
+<td>0.03</td>
+<td>Hypothesis</td>
+</tr>
+<tr>
+<td>YouTube</td>
+<td>professionalism</td>
+<td>-0.03</td>
+<td>52</td>
+<td>0.940</td>
+<td>0.03</td>
+<td>Hypothesis</td>
+</tr>
+<tr>
+<td>short-form (Reels and TikTok)</td>
+<td>emotional_appeal</td>
+<td>-0.02</td>
+<td>35</td>
+<td>0.940</td>
+<td>0.03</td>
+<td>Hypothesis</td>
+</tr>
+<tr>
+<td>YouTube</td>
+<td>humor</td>
+<td>+0.01</td>
+<td>52</td>
+<td>0.940</td>
+<td>0.03</td>
+<td>Hypothesis</td>
+</tr>
+</tbody>
+</table></div>
+<p>Categorical features (YouTube only):</p>
+<ul>
+<li>Tone vs Cost per Contact (YouTube): lowest median cost per contact for <code>inspirational</code> ($59, n=5), highest for <code>humorous</code> ($110, n=9); Kruskal-Wallis p=0.566 (table C5v2). <strong>Hypothesis.</strong></li>
+<li>Offer Type vs Cost per Contact (YouTube): lowest median cost per contact for <code>free_course</code> ($32, n=9), highest for <code>free_consultation</code> ($102, n=19); Kruskal-Wallis p=0.408 (table C6v2). <strong>Hypothesis.</strong></li>
+<li>Integration Position vs Cost per Contact (YouTube): lowest median cost per contact for <code>beginning</code> ($79, n=15), highest for <code>end</code> ($134, n=6); Kruskal-Wallis p=0.706 (table C7v2). <strong>Hypothesis.</strong></li>
+</ul>
+<h2>4. Limitations</h2>
+<ul>
+<li>38 statistical tests were run. P-values are adjusted with Benjamini-Hochberg inside each table family, and the badges use the adjusted values.</li>
+<li>32 of the tested rows have power below 0.50 at the observed effect size. Treat them as ideas to test, not as findings.</li>
+<li>Platforms are never pooled for content features. YouTube reads and short-form reads are scored and compared separately, because length, placement and audience intent differ too much.</li>
+<li>The data is observational. Creators were not assigned scripts at random, so a pattern can come from the creator's audience rather than from the script.</li>
+<li>Content scores come from an LLM rater. Scores that are unstable between repeated runs should not carry a conclusion (see the multi-run step).</li>
+<li>Small groups in this dataset: story (n=12), tiktok (n=8). Their rows are descriptive only.</li>
+</ul>
+<h2>5. What to test next</h2>
+<ol>
+<li>Brief half of the next short-form (Reels and TikTok) creators to raise <code>benefit_clarity</code> and leave the other half on the standard brief. Hypothesis: it lowers cost per contact. Needs about 96 integrations per arm for 80% power at the observed effect. Primary metric: cost per contact.</li>
+<li>Brief half of the next YouTube creators to raise <code>specificity</code> and leave the other half on the standard brief. Hypothesis: it lowers cost per contact. Needs about 123 integrations per arm for 80% power at the observed effect. Primary metric: cost per contact.</li>
+<li>Brief half of the next YouTube creators to raise <code>benefit_clarity</code> and leave the other half on the standard brief. Hypothesis: it lowers cost per contact. Needs about 128 integrations per arm for 80% power at the observed effect. Primary metric: cost per contact.</li>
+</ol>
+<h2>6. Layer 1 tables: content impact zone</h2>
+<p>Outcome: cost per contact. Each table states its scope, sample size, method and caveat.</p>
+<h3>C1v2: Score-Response Correlations (YouTube)</h3>
+<ul>
+<li>Scope: <code>youtube_only</code></li>
+<li>Population: youtube_only integrations with score data and valid cost_per_contact.</li>
+<li>N: 53</li>
+<li>Outcome: <code>cost_per_contact</code></li>
+<li>Method: Spearman rank correlation between content score and cost_per_contact, with approximate power analysis.</li>
+<li>Evidence: Hypothesis</li>
+<li>Caveat: Exploratory when fewer than 10 paired observations.</li>
+</ul>
+<div class="scroll"><table>
+<thead>
+<tr>
+<th>Metric</th>
+<th>Rho</th>
+<th>p-value</th>
+<th>N</th>
+<th>Effect</th>
+<th>Power</th>
+<th>Req N (80%)</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>authenticity</td>
+<td>-0.228</td>
+<td>0.0977</td>
+<td>52</td>
+<td>small</td>
+<td>0.13</td>
+<td>302</td>
+</tr>
+<tr>
+<td>storytelling</td>
+<td>-0.101</td>
+<td>0.4724</td>
+<td>52</td>
+<td>small</td>
+<td>0.06</td>
+<td>1536</td>
+</tr>
+<tr>
+<td>emotional_appeal</td>
+<td>-0.200</td>
+<td>0.1489</td>
+<td>52</td>
+<td>small</td>
+<td>0.11</td>
+<td>393</td>
+</tr>
+<tr>
+<td>urgency</td>
+<td>-0.132</td>
+<td>0.3473</td>
+<td>52</td>
+<td>small</td>
+<td>0.07</td>
+<td>905</td>
+</tr>
+<tr>
+<td>specificity</td>
+<td>-0.358</td>
+<td>0.0066</td>
+<td>52</td>
+<td>medium</td>
+<td>0.25</td>
+<td>123</td>
+</tr>
+<tr>
+<td>benefit_clarity</td>
+<td>-0.350</td>
+<td>0.0081</td>
+<td>52</td>
+<td>medium</td>
+<td>0.24</td>
+<td>128</td>
+</tr>
+<tr>
+<td>humor</td>
+<td>0.011</td>
+<td>0.9401</td>
+<td>52</td>
+<td>negligible</td>
+<td>0.03</td>
+<td>138952</td>
+</tr>
+<tr>
+<td>professionalism</td>
+<td>-0.028</td>
+<td>0.8454</td>
+<td>52</td>
+<td>negligible</td>
+<td>0.03</td>
+<td>20676</td>
+</tr>
+</tbody>
+</table></div>
+<h3>C2v2: Score-Response Correlations (Short-form)</h3>
+<ul>
+<li>Scope: <code>short_form_only</code></li>
+<li>Population: short_form_only integrations with score data and valid cost_per_contact.</li>
+<li>N: 35</li>
+<li>Outcome: <code>cost_per_contact</code></li>
+<li>Method: Spearman rank correlation between content score and cost_per_contact, with approximate power analysis.</li>
+<li>Evidence: Hypothesis</li>
+<li>Caveat: Exploratory when fewer than 10 paired observations.</li>
+</ul>
+<div class="scroll"><table>
+<thead>
+<tr>
+<th>Metric</th>
+<th>Rho</th>
+<th>p-value</th>
+<th>N</th>
+<th>Effect</th>
+<th>Power</th>
+<th>Req N (80%)</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>authenticity</td>
+<td>-0.189</td>
+<td>0.2683</td>
+<td>35</td>
+<td>small</td>
+<td>0.08</td>
+<td>439</td>
+</tr>
+<tr>
+<td>storytelling</td>
+<td>-0.166</td>
+<td>0.3344</td>
+<td>35</td>
+<td>small</td>
+<td>0.07</td>
+<td>572</td>
+</tr>
+<tr>
+<td>emotional_appeal</td>
+<td>-0.018</td>
+<td>0.9164</td>
+<td>35</td>
+<td>negligible</td>
+<td>0.03</td>
+<td>47022</td>
+</tr>
+<tr>
+<td>urgency</td>
+<td>-0.032</td>
+<td>0.8543</td>
+<td>35</td>
+<td>negligible</td>
+<td>0.03</td>
+<td>15375</td>
+</tr>
+<tr>
+<td>specificity</td>
+<td>-0.247</td>
+<td>0.1423</td>
+<td>35</td>
+<td>small</td>
+<td>0.11</td>
+<td>257</td>
+</tr>
+<tr>
+<td>benefit_clarity</td>
+<td>-0.406</td>
+<td>0.0108</td>
+<td>35</td>
+<td>medium</td>
+<td>0.22</td>
+<td>96</td>
+</tr>
+<tr>
+<td>humor</td>
+<td>0.032</td>
+<td>0.8522</td>
+<td>35</td>
+<td>negligible</td>
+<td>0.03</td>
+<td>14936</td>
+</tr>
+<tr>
+<td>professionalism</td>
+<td>0.312</td>
+<td>0.0594</td>
+<td>35</td>
+<td>medium</td>
+<td>0.15</td>
+<td>162</td>
+</tr>
+</tbody>
+</table></div>
+<h3>Q1v2: Quartile Comparison (YouTube)</h3>
+<ul>
+<li>Scope: <code>youtube_only</code></li>
+<li>Population: youtube_only integrations split by cost_per_contact quartiles; Q1 n=13, Q4 n=13.</li>
+<li>N: 52</li>
+<li>Outcome: <code>cost_per_contact</code></li>
+<li>Method: Quartile comparison: Q1 (lowest cost_per_contact) vs Q4 (highest), Mann-Whitney U, Cliff's delta, bootstrap CI.</li>
+<li>Evidence: Hypothesis</li>
+<li>Caveat: Quartile splits may be thin with small datasets.</li>
+</ul>
+<div class="scroll"><table>
+<thead>
+<tr>
+<th>Metric</th>
+<th>Q1 Median</th>
+<th>Q4 Median</th>
+<th>Gap</th>
+<th>Cliff's Delta</th>
+<th>Magnitude</th>
+<th>p-value</th>
+<th>CI</th>
+<th>Power</th>
+<th>Req N (80%)</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>authenticity</td>
+<td>6.00</td>
+<td>5.00</td>
+<td>1.00</td>
+<td>0.302</td>
+<td>small</td>
+<td>0.1948</td>
+<td>[-1.00, 3.00]</td>
+<td>0.12</td>
+<td>173</td>
+</tr>
+<tr>
+<td>storytelling</td>
+<td>6.00</td>
+<td>5.00</td>
+<td>1.00</td>
+<td>0.237</td>
+<td>small</td>
+<td>0.3026</td>
+<td>[-1.00, 2.00]</td>
+<td>0.09</td>
+<td>281</td>
+</tr>
+<tr>
+<td>emotional_appeal</td>
+<td>6.00</td>
+<td>5.00</td>
+<td>1.00</td>
+<td>0.201</td>
+<td>small</td>
+<td>0.3889</td>
+<td>[-1.00, 3.00]</td>
+<td>0.07</td>
+<td>388</td>
+</tr>
+<tr>
+<td>urgency</td>
+<td>4.00</td>
+<td>4.00</td>
+<td>0.00</td>
+<td>0.337</td>
+<td>medium</td>
+<td>0.1341</td>
+<td>[0.00, 3.00]</td>
+<td>0.14</td>
+<td>139</td>
+</tr>
+<tr>
+<td>specificity</td>
+<td>5.00</td>
+<td>4.00</td>
+<td>1.00</td>
+<td>0.680</td>
+<td>large</td>
+<td>0.0025</td>
+<td>[0.00, 4.00]</td>
+<td>0.41</td>
+<td>34</td>
+</tr>
+<tr>
+<td>benefit_clarity</td>
+<td>6.00</td>
+<td>5.00</td>
+<td>1.00</td>
+<td>0.467</td>
+<td>medium</td>
+<td>0.0414</td>
+<td>[0.00, 3.00]</td>
+<td>0.22</td>
+<td>72</td>
+</tr>
+<tr>
+<td>humor</td>
+<td>5.00</td>
+<td>4.00</td>
+<td>1.00</td>
+<td>0.142</td>
+<td>negligible</td>
+<td>0.5508</td>
+<td>[-2.00, 3.00]</td>
+<td>0.05</td>
+<td>779</td>
+</tr>
+<tr>
+<td>professionalism</td>
+<td>6.00</td>
+<td>6.00</td>
+<td>0.00</td>
+<td>-0.024</td>
+<td>negligible</td>
+<td>0.9382</td>
+<td>[-3.00, 4.00]</td>
+<td>0.03</td>
+<td>28027</td>
+</tr>
+</tbody>
+</table></div>
+<h3>Q2v2: Quartile Comparison (Short-form)</h3>
+<ul>
+<li>Scope: <code>short_form_only</code></li>
+<li>Population: short_form_only integrations split by cost_per_contact quartiles; Q1 n=9, Q4 n=9.</li>
+<li>N: 35</li>
+<li>Outcome: <code>cost_per_contact</code></li>
+<li>Method: Quartile comparison: Q1 (lowest cost_per_contact) vs Q4 (highest), Mann-Whitney U, Cliff's delta, bootstrap CI.</li>
+<li>Evidence: Hypothesis</li>
+<li>Caveat: Quartile splits may be thin with small datasets.</li>
+</ul>
+<div class="scroll"><table>
+<thead>
+<tr>
+<th>Metric</th>
+<th>Q1 Median</th>
+<th>Q4 Median</th>
+<th>Gap</th>
+<th>Cliff's Delta</th>
+<th>Magnitude</th>
+<th>p-value</th>
+<th>CI</th>
+<th>Power</th>
+<th>Req N (80%)</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>authenticity</td>
+<td>7.00</td>
+<td>5.00</td>
+<td>2.00</td>
+<td>0.395</td>
+<td>medium</td>
+<td>0.1653</td>
+<td>[-2.00, 4.00]</td>
+<td>0.13</td>
+<td>101</td>
+</tr>
+<tr>
+<td>storytelling</td>
+<td>6.00</td>
+<td>5.00</td>
+<td>1.00</td>
+<td>0.296</td>
+<td>small</td>
+<td>0.3018</td>
+<td>[-2.00, 3.00]</td>
+<td>0.09</td>
+<td>179</td>
+</tr>
+<tr>
+<td>emotional_appeal</td>
+<td>5.00</td>
+<td>6.00</td>
+<td>-1.00</td>
+<td>-0.049</td>
+<td>negligible</td>
+<td>0.8920</td>
+<td>[-3.00, 2.00]</td>
+<td>0.03</td>
+<td>6439</td>
+</tr>
+<tr>
+<td>urgency</td>
+<td>5.00</td>
+<td>5.00</td>
+<td>0.00</td>
+<td>-0.111</td>
+<td>negligible</td>
+<td>0.7196</td>
+<td>[-4.00, 3.00]</td>
+<td>0.04</td>
+<td>1272</td>
+</tr>
+<tr>
+<td>specificity</td>
+<td>6.00</td>
+<td>4.00</td>
+<td>2.00</td>
+<td>0.333</td>
+<td>medium</td>
+<td>0.2385</td>
+<td>[-2.00, 4.00]</td>
+<td>0.11</td>
+<td>142</td>
+</tr>
+<tr>
+<td>benefit_clarity</td>
+<td>6.00</td>
+<td>4.00</td>
+<td>2.00</td>
+<td>0.568</td>
+<td>large</td>
+<td>0.0440</td>
+<td>[-1.00, 4.00]</td>
+<td>0.22</td>
+<td>49</td>
+</tr>
+<tr>
+<td>humor</td>
+<td>4.00</td>
+<td>4.00</td>
+<td>0.00</td>
+<td>0.111</td>
+<td>negligible</td>
+<td>0.7189</td>
+<td>[-2.00, 3.00]</td>
+<td>0.04</td>
+<td>1272</td>
+</tr>
+<tr>
+<td>professionalism</td>
+<td>6.00</td>
+<td>8.00</td>
+<td>-2.00</td>
+<td>-0.383</td>
+<td>medium</td>
+<td>0.1791</td>
+<td>[-3.00, 1.00]</td>
+<td>0.13</td>
+<td>108</td>
+</tr>
+</tbody>
+</table></div>
+<h3>C5v2: Tone vs Cost per Contact (YouTube)</h3>
+<ul>
+<li>Scope: <code>youtube_only</code></li>
+<li>Population: youtube_only integrations with populated <code>enrichment_overall_tone</code> and valid cost_per_contact.</li>
+<li>N: 52</li>
+<li>Outcome: <code>cost_per_contact</code></li>
+<li>Method: Kruskal-Wallis test comparing median cost_per_contact across <code>enrichment_overall_tone</code> categories.</li>
+<li>Evidence: Hypothesis</li>
+<li>Caveat: Small categories may be underpowered.</li>
+<li>Statistical status: p=0.566, adj_p=0.793, effect=N/A</li>
+</ul>
+<div class="scroll"><table>
+<thead>
+<tr>
+<th>Category</th>
+<th>N</th>
+<th>Median CPC</th>
+<th>Mean CPC</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>casual</td>
+<td>12</td>
+<td>$65</td>
+<td>$82</td>
+</tr>
+<tr>
+<td>conversational</td>
+<td>13</td>
+<td>$103</td>
+<td>$278</td>
+</tr>
+<tr>
+<td>educational</td>
+<td>2</td>
+<td>$55</td>
+<td>$55</td>
+</tr>
+<tr>
+<td>enthusiastic</td>
+<td>11</td>
+<td>$102</td>
+<td>$173</td>
+</tr>
+<tr>
+<td>humorous</td>
+<td>9</td>
+<td>$110</td>
+<td>$258</td>
+</tr>
+<tr>
+<td>inspirational</td>
+<td>5</td>
+<td>$59</td>
+<td>$158</td>
+</tr>
+</tbody>
+</table></div>
+<h3>C6v2: Offer Type vs Cost per Contact (YouTube)</h3>
+<ul>
+<li>Scope: <code>youtube_only</code></li>
+<li>Population: youtube_only integrations with populated <code>enrichment_offer_type</code> and valid cost_per_contact.</li>
+<li>N: 52</li>
+<li>Outcome: <code>cost_per_contact</code></li>
+<li>Method: Kruskal-Wallis test comparing median cost_per_contact across <code>enrichment_offer_type</code> categories.</li>
+<li>Evidence: Hypothesis</li>
+<li>Caveat: Small categories may be underpowered.</li>
+<li>Statistical status: p=0.408, adj_p=0.650, effect=N/A</li>
+</ul>
+<div class="scroll"><table>
+<thead>
+<tr>
+<th>Category</th>
+<th>N</th>
+<th>Median CPC</th>
+<th>Mean CPC</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>discount</td>
+<td>6</td>
+<td>$64</td>
+<td>$92</td>
+</tr>
+<tr>
+<td>free_consultation</td>
+<td>19</td>
+<td>$102</td>
+<td>$249</td>
+</tr>
+<tr>
+<td>free_course</td>
+<td>9</td>
+<td>$32</td>
+<td>$209</td>
+</tr>
+<tr>
+<td>other</td>
+<td>8</td>
+<td>$82</td>
+<td>$121</td>
+</tr>
+<tr>
+<td>promo_code</td>
+<td>10</td>
+<td>$94</td>
+<td>$159</td>
+</tr>
+</tbody>
+</table></div>
+<h3>C7v2: Integration Position vs Cost per Contact (YouTube)</h3>
+<ul>
+<li>Scope: <code>youtube_only</code></li>
+<li>Population: youtube_only integrations with populated <code>enrichment_integration_position</code> and valid cost_per_contact.</li>
+<li>N: 52</li>
+<li>Outcome: <code>cost_per_contact</code></li>
+<li>Method: Kruskal-Wallis test comparing median cost_per_contact across <code>enrichment_integration_position</code> categories.</li>
+<li>Evidence: Hypothesis</li>
+<li>Caveat: Small categories may be underpowered.</li>
+<li>Statistical status: p=0.706, adj_p=0.899, effect=N/A</li>
+</ul>
+<div class="scroll"><table>
+<thead>
+<tr>
+<th>Category</th>
+<th>N</th>
+<th>Median CPC</th>
+<th>Mean CPC</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>beginning</td>
+<td>15</td>
+<td>$79</td>
+<td>$204</td>
+</tr>
+<tr>
+<td>end</td>
+<td>6</td>
+<td>$134</td>
+<td>$429</td>
+</tr>
+<tr>
+<td>middle</td>
+<td>31</td>
+<td>$81</td>
+<td>$132</td>
+</tr>
+</tbody>
+</table></div>
+<h3>R1v2: Platform Response Summary</h3>
+<ul>
+<li>Scope: <code>all_platforms</code></li>
+<li>Population: All integrations grouped by platform.</li>
+<li>N: 118</li>
+<li>Outcome: <code>has_contacts</code></li>
+<li>Method: Platform roll-up with a global chi-square test when every platform bucket is sufficiently large.</li>
+<li>Evidence: Hypothesis</li>
+<li>Caveat: TikTok and any small platform bucket stay descriptive-only.</li>
+<li>Statistical status: p=0.793, adj_p=0.793, effect=0.094</li>
+</ul>
+<div class="scroll"><table>
+<thead>
+<tr>
+<th>Platform</th>
+<th>Count</th>
+<th>With Contacts</th>
+<th>Total Contacts</th>
+<th>Contact Rate</th>
+<th>Median Cost/Contact</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>reel</td>
+<td>40</td>
+<td>40</td>
+<td>811</td>
+<td>100.0%</td>
+<td>$87</td>
+</tr>
+<tr>
+<td>story</td>
+<td>12</td>
+<td>12</td>
+<td>277</td>
+<td>100.0%</td>
+<td>$33</td>
+</tr>
+<tr>
+<td>tiktok</td>
+<td>8</td>
+<td>8</td>
+<td>81</td>
+<td>100.0%</td>
+<td>$208</td>
+</tr>
+<tr>
+<td>youtube</td>
+<td>58</td>
+<td>57</td>
+<td>2488</td>
+<td>98.3%</td>
+<td>$83</td>
+</tr>
+</tbody>
+</table></div>
+<h3>R2v2: Funnel Conversion Summary</h3>
+<ul>
+<li>Scope: <code>all_platforms</code></li>
+<li>Population: All integrations with available funnel columns.</li>
+<li>N: 118</li>
+<li>Outcome: <code>funnel_stage_rates</code></li>
+<li>Method: Descriptive medians and means over row-level funnel conversion rates.</li>
+<li>Evidence: Hypothesis</li>
+<li>Caveat: Used for operational diagnostics, not for significance claims.</li>
+</ul>
+<div class="scroll"><table>
+<thead>
+<tr>
+<th>Funnel Stage</th>
+<th>Median</th>
+<th>Mean</th>
+<th>Non-zero</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Reach -&gt; Traffic</td>
+<td>0.6%</td>
+<td>0.7%</td>
+<td>118/118</td>
+</tr>
+<tr>
+<td>Traffic -&gt; Contacts</td>
+<td>8.9%</td>
+<td>9.3%</td>
+<td>117/118</td>
+</tr>
+<tr>
+<td>Contacts -&gt; Deals</td>
+<td>57.1%</td>
+<td>56.6%</td>
+<td>114/117</td>
+</tr>
+<tr>
+<td>Deals -&gt; Calls</td>
+<td>62.0%</td>
+<td>59.6%</td>
+<td>107/114</td>
+</tr>
+<tr>
+<td>Calls -&gt; Purchase</td>
+<td>8.8%</td>
+<td>14.2%</td>
+<td>65/107</td>
+</tr>
+</tbody>
+</table></div>
+<h2>7. Layer 2 tables: sales operations context</h2>
+<p>Downstream association only. Do not read these as the effect of content.</p>
+<h3>D1v2: Downstream Outcomes by Platform</h3>
+<ul>
+<li>Scope: <code>all_platforms</code></li>
+<li>Population: All integrations grouped by platform.</li>
+<li>N: 118</li>
+<li>Outcome: <code>has_purchases</code></li>
+<li>Method: Platform roll-up plus a global chi-square test when the platform buckets are large enough.</li>
+<li>Evidence: Probable signal</li>
+<li>Caveat: Treat this table as downstream association, not direct content impact.</li>
+<li>Statistical status: p=0.027, adj_p=0.053, effect=0.279</li>
+</ul>
+<div class="scroll"><table>
+<thead>
+<tr>
+<th>Platform</th>
+<th>Count</th>
+<th>With Purchases</th>
+<th>Total Purchases</th>
+<th>Purchase Rate</th>
+<th>Winner CPP</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>reel</td>
+<td>40</td>
+<td>17</td>
+<td>44</td>
+<td>42.5%</td>
+<td>$416</td>
+</tr>
+<tr>
+<td>story</td>
+<td>12</td>
+<td>9</td>
+<td>21</td>
+<td>75.0%</td>
+<td>$407</td>
+</tr>
+<tr>
+<td>tiktok</td>
+<td>8</td>
+<td>2</td>
+<td>3</td>
+<td>25.0%</td>
+<td>$383</td>
+</tr>
+<tr>
+<td>youtube</td>
+<td>58</td>
+<td>37</td>
+<td>91</td>
+<td>63.8%</td>
+<td>$1,112</td>
+</tr>
+</tbody>
+</table></div>
+<h3>D2v2: Budget Tier Downstream Summary</h3>
+<ul>
+<li>Scope: <code>all_platforms</code></li>
+<li>Population: All integrations grouped by <code>budget_tier</code>.</li>
+<li>N: 118</li>
+<li>Outcome: <code>has_purchases</code></li>
+<li>Method: Descriptive group roll-up with a global chi-square test when every bucket is sufficiently large.</li>
+<li>Evidence: Hypothesis</li>
+<li>Caveat: Small buckets remain exploratory; purchases are treated as downstream association only.</li>
+</ul>
+<div class="scroll"><table>
+<thead>
+<tr>
+<th>Group</th>
+<th>Count</th>
+<th>With Purchases</th>
+<th>Total Purchases</th>
+<th>Purchase Rate</th>
+<th>Winner CPP</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>$0-$1,000</td>
+<td>42</td>
+<td>20</td>
+<td>47</td>
+<td>47.6%</td>
+<td>$302</td>
+</tr>
+<tr>
+<td>$1,001-$3,000</td>
+<td>57</td>
+<td>32</td>
+<td>68</td>
+<td>56.1%</td>
+<td>$984</td>
+</tr>
+<tr>
+<td>$3,001-$5,000</td>
+<td>17</td>
+<td>13</td>
+<td>44</td>
+<td>76.5%</td>
+<td>$1,093</td>
+</tr>
+<tr>
+<td>$5,001-$8,000</td>
+<td>2</td>
+<td>0</td>
+<td>0</td>
+<td>0.0%</td>
+<td>N/A</td>
+</tr>
+</tbody>
+</table></div>
+<h3>D3v2: Niche Downstream Summary</h3>
+<ul>
+<li>Scope: <code>all_platforms</code></li>
+<li>Population: All integrations grouped by <code>topic</code>.</li>
+<li>N: 118</li>
+<li>Outcome: <code>has_purchases</code></li>
+<li>Method: Descriptive group roll-up with a global chi-square test when every bucket is sufficiently large.</li>
+<li>Evidence: Hypothesis</li>
+<li>Caveat: Small buckets remain exploratory; purchases are treated as downstream association only.</li>
+</ul>
+<div class="scroll"><table>
+<thead>
+<tr>
+<th>Group</th>
+<th>Count</th>
+<th>With Purchases</th>
+<th>Total Purchases</th>
+<th>Purchase Rate</th>
+<th>Winner CPP</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Career advice</td>
+<td>13</td>
+<td>8</td>
+<td>18</td>
+<td>61.5%</td>
+<td>$958</td>
+</tr>
+<tr>
+<td>Design</td>
+<td>23</td>
+<td>10</td>
+<td>23</td>
+<td>43.5%</td>
+<td>$809</td>
+</tr>
+<tr>
+<td>Education</td>
+<td>10</td>
+<td>4</td>
+<td>8</td>
+<td>40.0%</td>
+<td>$950</td>
+</tr>
+<tr>
+<td>Gaming</td>
+<td>18</td>
+<td>13</td>
+<td>29</td>
+<td>72.2%</td>
+<td>$748</td>
+</tr>
+<tr>
+<td>Lifestyle</td>
+<td>6</td>
+<td>4</td>
+<td>16</td>
+<td>66.7%</td>
+<td>$444</td>
+</tr>
+<tr>
+<td>Personal finance</td>
+<td>8</td>
+<td>5</td>
+<td>6</td>
+<td>62.5%</td>
+<td>$1,467</td>
+</tr>
+<tr>
+<td>Productivity</td>
+<td>10</td>
+<td>6</td>
+<td>27</td>
+<td>60.0%</td>
+<td>$550</td>
+</tr>
+<tr>
+<td>Science</td>
+<td>12</td>
+<td>5</td>
+<td>12</td>
+<td>41.7%</td>
+<td>$658</td>
+</tr>
+<tr>
+<td>Tech</td>
+<td>18</td>
+<td>10</td>
+<td>20</td>
+<td>55.6%</td>
+<td>$1,270</td>
+</tr>
+</tbody>
+</table></div>
+<h3>D4v2: Manager Downstream Summary</h3>
+<ul>
+<li>Scope: <code>all_platforms</code></li>
+<li>Population: All integrations grouped by <code>manager</code>.</li>
+<li>N: 118</li>
+<li>Outcome: <code>has_purchases</code></li>
+<li>Method: Descriptive group roll-up with a global chi-square test when every bucket is sufficiently large.</li>
+<li>Evidence: Hypothesis</li>
+<li>Caveat: Small buckets remain exploratory; purchases are treated as downstream association only.</li>
+<li>Statistical status: p=0.971, adj_p=0.971, effect=0.042</li>
+</ul>
+<div class="scroll"><table>
+<thead>
+<tr>
+<th>Group</th>
+<th>Count</th>
+<th>With Purchases</th>
+<th>Total Purchases</th>
+<th>Purchase Rate</th>
+<th>Winner CPP</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Agency Kestrel</td>
+<td>30</td>
+<td>17</td>
+<td>31</td>
+<td>56.7%</td>
+<td>$1,176</td>
+</tr>
+<tr>
+<td>Agency Lumen</td>
+<td>19</td>
+<td>11</td>
+<td>23</td>
+<td>57.9%</td>
+<td>$1,046</td>
+</tr>
+<tr>
+<td>In-house A</td>
+<td>42</td>
+<td>23</td>
+<td>67</td>
+<td>54.8%</td>
+<td>$712</td>
+</tr>
+<tr>
+<td>In-house B</td>
+<td>27</td>
+<td>14</td>
+<td>38</td>
+<td>51.9%</td>
+<td>$553</td>
+</tr>
+</tbody>
+</table></div>
+<h2>8. Wording patterns: efficient versus inefficient reads</h2>
+<p>High performers are the cheapest quarter by cost per contact inside each platform group; low performers are the most expensive quarter. The middle half is left out. Counts this small are descriptive.</p>
+<p><strong>Sample sizes:</strong> 22 high-performers, 22 low-performers, 43 excluded (middle 50%)</p>
+<p><strong>Platform breakdown:</strong> YouTube: 52 (13 high / 13 low) | Short-form: 35 (9 high / 9 low)</p>
+<h3>T1: Text Statistics Comparison</h3>
+<div class="scroll"><table>
+<thead>
+<tr>
+<th>Metric</th>
+<th>High Performers</th>
+<th>Low Performers</th>
+<th>Gap</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Avg Word Count</td>
+<td>101.60</td>
+<td>86.60</td>
+<td>+15.00</td>
+</tr>
+<tr>
+<td>Avg Sentence Count</td>
+<td>9.90</td>
+<td>8.60</td>
+<td>+1.30</td>
+</tr>
+<tr>
+<td>Avg Question Count</td>
+<td>0.20</td>
+<td>0.20</td>
+<td>+0.00</td>
+</tr>
+<tr>
+<td>Avg Exclamation Count</td>
+<td>0.00</td>
+<td>0.00</td>
+<td>+0.00</td>
+</tr>
+<tr>
+<td>Avg First Person (I/my/me)</td>
+<td>4.10</td>
+<td>3.40</td>
+<td>+0.70</td>
+</tr>
+<tr>
+<td>Avg Second Person (you/your)</td>
+<td>5.10</td>
+<td>3.90</td>
+<td>+1.20</td>
+</tr>
+<tr>
+<td>Avg Product Mentions</td>
+<td>1.00</td>
+<td>1.00</td>
+<td>+0.00</td>
+</tr>
+</tbody>
+</table></div>
+<hr />
+<h3>T2: Opening Pattern Distribution</h3>
+<div class="scroll"><table>
+<thead>
+<tr>
+<th>Opening Type</th>
+<th>High Performers</th>
+<th>Low Performers</th>
+<th>Total</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>direct_sponsor_mention</td>
+<td>6</td>
+<td>10</td>
+<td>16</td>
+</tr>
+<tr>
+<td>personal_anecdote</td>
+<td>3</td>
+<td>1</td>
+<td>4</td>
+</tr>
+<tr>
+<td>problem_statement</td>
+<td>2</td>
+<td>3</td>
+<td>5</td>
+</tr>
+<tr>
+<td>question</td>
+<td>4</td>
+<td>4</td>
+<td>8</td>
+</tr>
+<tr>
+<td>smooth_transition</td>
+<td>4</td>
+<td>4</td>
+<td>8</td>
+</tr>
+<tr>
+<td>statistic</td>
+<td>3</td>
+<td>0</td>
+<td>3</td>
+</tr>
+</tbody>
+</table></div>
+<hr />
+<h3>T3: Closing Pattern Distribution</h3>
+<div class="scroll"><table>
+<thead>
+<tr>
+<th>Closing Type</th>
+<th>High Performers</th>
+<th>Low Performers</th>
+<th>Total</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>back_to_content</td>
+<td>3</td>
+<td>4</td>
+<td>7</td>
+</tr>
+<tr>
+<td>benefit_summary</td>
+<td>6</td>
+<td>5</td>
+<td>11</td>
+</tr>
+<tr>
+<td>casual_dismiss</td>
+<td>3</td>
+<td>2</td>
+<td>5</td>
+</tr>
+<tr>
+<td>cta_repeat</td>
+<td>4</td>
+<td>8</td>
+<td>12</td>
+</tr>
+<tr>
+<td>emotional_close</td>
+<td>3</td>
+<td>3</td>
+<td>6</td>
+</tr>
+<tr>
+<td>urgency_push</td>
+<td>3</td>
+<td>0</td>
+<td>3</td>
+</tr>
+</tbody>
+</table></div>
+<hr />
+<h3>T4: Persuasion Function Distribution</h3>
+<div class="scroll"><table>
+<thead>
+<tr>
+<th>Function</th>
+<th>High Performers</th>
+<th>Low Performers</th>
+<th>Total</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>benefit</td>
+<td>36</td>
+<td>30</td>
+<td>66</td>
+</tr>
+<tr>
+<td>credibility</td>
+<td>8</td>
+<td>8</td>
+<td>16</td>
+</tr>
+<tr>
+<td>objection_handling</td>
+<td>6</td>
+<td>5</td>
+<td>11</td>
+</tr>
+<tr>
+<td>pain_point</td>
+<td>11</td>
+<td>10</td>
+<td>21</td>
+</tr>
+<tr>
+<td>social_proof</td>
+<td>6</td>
+<td>8</td>
+<td>14</td>
+</tr>
+<tr>
+<td>urgency</td>
+<td>8</td>
+<td>7</td>
+<td>15</td>
+</tr>
+</tbody>
+</table></div>
+</article>
+</div>
+</body>
+</html>
